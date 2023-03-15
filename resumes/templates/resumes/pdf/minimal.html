@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', Helvetica, Arial, sans-serif;
+            background: #fff;
+            color: #000;
+            width: 210mm;
+            height: 297mm;
+            padding: 20mm;
+        }
+        .name {
+            font-size: 72pt;
+            font-weight: 700;
+            line-height: 0.9;
+            letter-spacing: -3px;
+            margin-bottom: 8mm;
+        }
+        .bio {
+            font-size: 11pt;
+            line-height: 1.5;
+            max-width: 60%;
+            margin-bottom: 12mm;
+            color: #333;
+        }
+        .divider {
+            width: 100%;
+            height: 3px;
+            background: #000;
+            margin-bottom: 12mm;
+        }
+        .section-title {
+            font-size: 10pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 6mm;
+        }
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4mm;
+            margin-bottom: 12mm;
+        }
+        .skill {
+            font-size: 9pt;
+            font-weight: 700;
+            padding: 2mm 4mm;
+            border: 2px solid #000;
+        }
+        .experience-item {
+            margin-bottom: 6mm;
+        }
+        .exp-role {
+            font-size: 13pt;
+            font-weight: 700;
+            margin-bottom: 1mm;
+        }
+        .exp-company {
+            font-size: 10pt;
+            color: #555;
+        }
+        .exp-years {
+            font-size: 9pt;
+            color: #888;
+            margin-top: 1mm;
+        }
+        .contacts {
+            position: absolute;
+            bottom: 20mm;
+            left: 20mm;
+            right: 20mm;
+            font-size: 9pt;
+            color: #666;
+            border-top: 1px solid #ccc;
+            padding-top: 4mm;
+        }
+    </style>
+</head>
+<body>
+    <div class="name">{{ resume.name }}</div>
+    {% if resume.bio %}
+    <div class="bio">{{ resume.bio }}</div>
+    {% endif %}
+    <div class="divider"></div>
+
+    {% if resume.skills %}
+    <div class="section-title">Stack</div>
+    <div class="skills">
+        {% for skill in resume.skills %}
+        <span class="skill">{{ skill }}</span>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if resume.experience %}
+    <div class="section-title">Experience</div>
+    {% for exp in resume.experience %}
+    <div class="experience-item">
+        <div class="exp-role">{{ exp.role }}</div>
+        <div class="exp-company">{{ exp.company }}</div>
+        <div class="exp-years">{{ exp.years }}</div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="contacts">
+        Generated via Swiss Resume Generator
+    </div>
+</body>
+</html>

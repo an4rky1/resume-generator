@@ -1,0 +1,82 @@
+{% extends 'resumes/base.html' %}
+
+{% block title %}{{ resume.name }} — Swiss Resume{% endblock %}
+
+{% block content %}
+<div class="min-h-screen">
+    <header class="border-b-4 border-swiss-black">
+        <div class="max-w-6xl mx-auto px-6 py-6 flex justify-between items-end">
+            <h1 class="text-3xl font-black tracking-tighter">
+                SWISS <span class="text-swiss-red">RESUME</span>
+            </h1>
+            <a href="{% url 'resumes:create' %}" class="text-sm font-bold uppercase tracking-widest text-swiss-gray hover:text-swiss-black transition-colors">
+                + New
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-12">
+            <div class="lg:col-span-3">
+                <div class="text-7xl font-black tracking-tighter leading-none mb-6">
+                    {{ resume.name }}
+                </div>
+
+                {% if resume.bio %}
+                <div class="text-lg text-swiss-gray leading-relaxed max-w-lg mb-10 pb-10 border-b border-swiss-black/20">
+                    {{ resume.bio }}
+                </div>
+                {% endif %}
+
+                {% if resume.skills %}
+                <div class="mb-10">
+                    <div class="text-xs font-bold uppercase tracking-widest text-swiss-gray mb-4">Stack</div>
+                    <div class="flex flex-wrap gap-2">
+                        {% for skill in resume.skills %}
+                        <span class="px-3 py-1.5 bg-swiss-black text-white text-sm font-bold">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if resume.experience %}
+                <div class="mb-10">
+                    <div class="text-xs font-bold uppercase tracking-widest text-swiss-gray mb-4">Experience</div>
+                    <div class="space-y-6">
+                        {% for exp in resume.experience %}
+                        <div class="pl-4 border-l-2 border-swiss-red">
+                            <div class="text-xl font-bold">{{ exp.role }}</div>
+                            <div class="text-swiss-gray">{{ exp.company }}</div>
+                            <div class="text-sm text-swiss-gray/60 mt-1">{{ exp.years }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="lg:col-span-2">
+                <div class="sticky top-8">
+                    <a href="{% url 'resumes:download' slug=resume.slug %}"
+                       class="block w-full py-5 bg-swiss-black text-white font-bold text-xl tracking-wide text-center hover:bg-swiss-red transition-colors mb-4">
+                        DOWNLOAD PDF
+                    </a>
+                    <div class="text-xs text-swiss-gray text-center">
+                        A4, print-ready, embedded Inter font
+                    </div>
+
+                    <div class="mt-10 p-6 bg-swiss-beige">
+                        <div class="text-xs font-bold uppercase tracking-widest text-swiss-gray mb-2">Template</div>
+                        <div class="font-bold text-lg capitalize">{{ resume.get_template_style_display }}</div>
+                    </div>
+
+                    <div class="mt-4 p-6 bg-swiss-beige">
+                        <div class="text-xs font-bold uppercase tracking-widest text-swiss-gray mb-2">Public link</div>
+                        <div class="text-sm font-mono text-swiss-gray break-all">{{ request.build_absolute_uri }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

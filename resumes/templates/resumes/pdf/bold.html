@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', Helvetica, Arial, sans-serif;
+            background: #f5f0e8;
+            color: #000;
+            width: 210mm;
+            height: 297mm;
+            padding: 0;
+        }
+        .header {
+            background: #000;
+            color: #fff;
+            padding: 16mm 20mm 12mm;
+        }
+        .name {
+            font-size: 64pt;
+            font-weight: 700;
+            line-height: 0.85;
+            letter-spacing: -4px;
+        }
+        .content {
+            padding: 16mm 20mm;
+        }
+        .bio {
+            font-size: 12pt;
+            line-height: 1.6;
+            max-width: 70%;
+            margin-bottom: 16mm;
+            border-left: 4px solid #000;
+            padding-left: 6mm;
+        }
+        .grid {
+            display: flex;
+            gap: 20mm;
+        }
+        .col-left {
+            flex: 1;
+        }
+        .col-right {
+            flex: 1.2;
+        }
+        .section-title {
+            font-size: 11pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 6mm;
+            padding-bottom: 2mm;
+            border-bottom: 2px solid #000;
+        }
+        .skill {
+            font-size: 10pt;
+            font-weight: 700;
+            padding: 3mm 0;
+            border-bottom: 1px solid #ccc;
+        }
+        .experience-item {
+            margin-bottom: 8mm;
+        }
+        .exp-role {
+            font-size: 14pt;
+            font-weight: 700;
+            margin-bottom: 1mm;
+        }
+        .exp-company {
+            font-size: 10pt;
+            color: #444;
+        }
+        .exp-years {
+            font-size: 9pt;
+            color: #888;
+            margin-top: 2mm;
+        }
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #000;
+            color: #fff;
+            padding: 6mm 20mm;
+            font-size: 9pt;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="name">{{ resume.name }}</div>
+    </div>
+    <div class="content">
+        {% if resume.bio %}
+        <div class="bio">{{ resume.bio }}</div>
+        {% endif %}
+        <div class="grid">
+            <div class="col-left">
+                {% if resume.skills %}
+                <div class="section-title">Stack</div>
+                {% for skill in resume.skills %}
+                <div class="skill">{{ skill }}</div>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-right">
+                {% if resume.experience %}
+                <div class="section-title">Experience</div>
+                {% for exp in resume.experience %}
+                <div class="experience-item">
+                    <div class="exp-role">{{ exp.role }}</div>
+                    <div class="exp-company">{{ exp.company }}</div>
+                    <div class="exp-years">{{ exp.years }}</div>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="footer">Swiss Resume Generator</div>
+</body>
+</html>

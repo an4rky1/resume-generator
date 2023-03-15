@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from django.conf import settings
+from django.template.loader import render_to_string
 from weasyprint import HTML, CSS
 
 FONT_DIR = Path(settings.BASE_DIR) / 'resumes' / 'static' / 'fonts'
@@ -44,3 +45,13 @@ class PdfGenerationService:
         font_css = CSS(string=FONT_CSS)
         pdf = HTML(string=html_content).write_pdf(stylesheets=[font_css])
         return pdf
+
+    @staticmethod
+    def render_resume_html(resume) -> str:
+        template_map = {
+            'minimal': 'resumes/pdf/minimal.html',
+            'bold': 'resumes/pdf/bold.html',
+            'classic': 'resumes/pdf/classic.html',
+        }
+        template_name = template_map.get(resume.template_style, 'resumes/pdf/minimal.html')
+        return render_to_string(template_name, {'resume': resume})

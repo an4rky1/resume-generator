@@ -1,0 +1,149 @@
+{% extends 'resumes/base.html' %}
+
+{% block title %}Create Resume — Swiss Resume Generator{% endblock %}
+
+{% block content %}
+<div class="min-h-screen">
+    <header class="border-b-4 border-swiss-black">
+        <div class="max-w-6xl mx-auto px-6 py-8">
+            <h1 class="text-6xl md:text-8xl font-black tracking-tighter leading-none">
+                SWISS<br><span class="text-swiss-red">RESUME</span>
+            </h1>
+            <p class="mt-4 text-swiss-gray text-lg max-w-md">
+                Минималистичный генератор резюме-визиток в стиле швейцарского плаката 60-х
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12">
+        <form method="post" x-data="resumeForm()" @submit="prepareSubmit()">
+            {% csrf_token %}
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+                <div>
+                    <div class="mb-10">
+                        <label class="block text-xs font-bold uppercase tracking-widest text-swiss-gray mb-3">
+                            Имя и Фамилия
+                        </label>
+                        <input type="text" name="name" required
+                               class="w-full text-3xl font-bold border-b-2 border-swiss-black pb-2 bg-transparent focus:outline-none focus:border-swiss-red transition-colors placeholder:text-swiss-gray/40"
+                               placeholder="IVAN PETROV">
+                    </div>
+
+                    <div class="mb-10">
+                        <label class="block text-xs font-bold uppercase tracking-widest text-swiss-gray mb-3">
+                            О себе
+                        </label>
+                        <textarea name="bio" rows="3"
+                                  class="w-full text-base border-b-2 border-swiss-black/30 pb-2 bg-transparent focus:outline-none focus:border-swiss-red transition-colors placeholder:text-swiss-gray/40 resize-none"
+                                  placeholder="Backend-разработчик с 5-летним опытом..."></textarea>
+                    </div>
+
+                    <div class="mb-10">
+                        <label class="block text-xs font-bold uppercase tracking-widest text-swiss-gray mb-3">
+                            Стек (через запятую)
+                        </label>
+                        <input type="text" name="skills_input"
+                               class="w-full text-lg border-b-2 border-swiss-black/30 pb-2 bg-transparent focus:outline-none focus:border-swiss-red transition-colors placeholder:text-swiss-gray/40"
+                               placeholder="Django, Python, PostgreSQL, Docker">
+                    </div>
+
+                    <div class="mb-10">
+                        <label class="block text-xs font-bold uppercase tracking-widest text-swiss-gray mb-3">
+                            Опыт работы (JSON)
+                        </label>
+                        <textarea name="experience_input" rows="5"
+                                  class="w-full text-sm font-mono border-b-2 border-swiss-black/30 pb-2 bg-transparent focus:outline-none focus:border-swiss-red transition-colors placeholder:text-swiss-gray/40 resize-none"
+                                  placeholder='[{"company": "Acme", "role": "Dev", "years": "2022-2024"}]'></textarea>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="mb-10">
+                        <label class="block text-xs font-bold uppercase tracking-widest text-swiss-gray mb-6">
+                            Шаблон
+                        </label>
+
+                        <div class="grid grid-cols-1 gap-4">
+                            <label class="cursor-pointer block">
+                                <input type="radio" name="template_style" value="minimal" x-model="template" class="sr-only peer">
+                                <div class="p-6 border-2 border-swiss-black/20 peer-checked:border-swiss-black peer-checked:bg-swiss-black transition-all hover:border-swiss-black/50">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 bg-white border-2 border-swiss-black/20 flex items-center justify-center">
+                                            <div class="w-6 h-0.5 bg-swiss-black"></div>
+                                        </div>
+                                        <div>
+                                            <div class="font-bold text-lg">Minimal Grid</div>
+                                            <div class="text-sm text-swiss-gray">Чистая сетка, минимум декора</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <label class="cursor-pointer block">
+                                <input type="radio" name="template_style" value="bold" x-model="template" class="sr-only peer">
+                                <div class="p-6 border-2 border-swiss-black/20 peer-checked:border-swiss-black peer-checked:bg-swiss-black peer-checked:text-white transition-all hover:border-swiss-black/50">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 bg-swiss-black peer-checked:bg-white border-2 border-swiss-black/20 flex items-center justify-center">
+                                            <div class="w-6 h-2 bg-white peer-checked:bg-swiss-black"></div>
+                                        </div>
+                                        <div>
+                                            <div class="font-bold text-lg">Bold Asymmetric</div>
+                                            <div class="text-sm text-swiss-gray peer-checked:text-white/70">Контрастный чёрный блок, асимметрия</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <label class="cursor-pointer block">
+                                <input type="radio" name="template_style" value="classic" x-model="template" class="sr-only peer">
+                                <div class="p-6 border-2 border-swiss-black/20 peer-checked:border-swiss-black peer-checked:bg-swiss-red peer-checked:text-white transition-all hover:border-swiss-black/50">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 bg-swiss-red border-2 border-swiss-black/20 flex items-center justify-center">
+                                            <div class="w-6 h-0.5 bg-white"></div>
+                                        </div>
+                                        <div>
+                                            <div class="font-bold text-lg">Classic Swiss</div>
+                                            <div class="text-sm text-swiss-gray peer-checked:text-white/70">Красная полоса, классическая типографика</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                            class="w-full py-5 bg-swiss-black text-white font-bold text-xl tracking-wide hover:bg-swiss-red transition-colors">
+                        GENERATE PDF
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        {% if form.errors %}
+        <div class="mt-10 p-6 border-2 border-swiss-red bg-swiss-red/5">
+            <ul class="text-swiss-red font-medium">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                    <li>{{ field }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </main>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<script>
+    function resumeForm() {
+        return {
+            template: 'minimal',
+            prepareSubmit() {
+                // Alpine просто для визуала радио-кнопок
+            }
+        }
+    }
+</script>
+{% endblock %}
