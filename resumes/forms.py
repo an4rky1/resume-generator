@@ -43,4 +43,7 @@ class ResumeForm(forms.ModelForm):
                 raise forms.ValidationError('Experience должен быть JSON массивом')
             return data
         except json.JSONDecodeError:
-            raise forms.ValidationError('Невалидный JSON в Experience')
+            raise forms.ValidationError(
+                'Введите валидный JSON массив. '
+                'Пример: [{"company": "Acme", "role": "Dev", "years": "2023"}]'
+            )
