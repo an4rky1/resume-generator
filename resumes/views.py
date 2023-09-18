@@ -1,6 +1,6 @@
 from django.views.generic import CreateView, DetailView, View
 from django.http import HttpResponse
-from django.urls import reverse_lazy
+from django.urls import reverse
 
 from .forms import ResumeForm
 from .models import Resume
@@ -11,7 +11,6 @@ class ResumeCreateView(CreateView):
     model = Resume
     form_class = ResumeForm
     template_name = 'resumes/create.html'
-    success_url = reverse_lazy('resumes:create')
 
     def form_valid(self, form):
         resume = form.save(commit=False)
@@ -19,6 +18,9 @@ class ResumeCreateView(CreateView):
         resume.experience = form.cleaned_data['experience_input']
         resume.save()
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('resumes:detail', kwargs={'slug': self.object.slug})
 
 
 class ResumeDetailView(DetailView):

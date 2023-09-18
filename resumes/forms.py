@@ -1,5 +1,3 @@
-import json
-
 from django import forms
 
 from .models import Resume
@@ -14,14 +12,11 @@ class ResumeForm(forms.ModelForm):
         }),
     )
     experience_input = forms.CharField(
-        label='Experience (JSON array)',
+        label='Experience (каждая строка: Компания | Должность | Годы)',
         required=False,
         widget=forms.Textarea(attrs={
             'rows': 4,
-            'placeholder': json.dumps([
-                {'company': 'Acme Corp', 'role': 'Backend Dev', 'years': '2022-2024'},
-                {'company': 'StartupX', 'role': 'Junior Dev', 'years': '2020-2022'},
-            ], indent=2),
+            'placeholder': 'Acme Corp | Backend Developer | 2022-2024\nStartupX | Junior Dev | 2020-2022',
         }),
     )
 
@@ -35,15 +30,21 @@ class ResumeForm(forms.ModelForm):
 
     def clean_experience_input(self):
         raw = self.cleaned_data.get('experience_input', '')
-        if not raw:
+        if not raw.strip():
             return []
-        try:
-            data = json.loads(raw)
-            if not isinstance(data, list):
-                raise forms.ValidationError('Experience должен быть JSON массивом')
-            return data
-        except json.JSONDecodeError:
-            raise forms.ValidationError(
-                'Введите валидный JSON массив. '
-                'Пример: [{"company": "Acme", "role": "Dev", "years": "2023"}]'
-            )
+        result = []
+        for line in raw.strip().split('\n'):
+            line = line.strip()
+            if not line:
+                continue
+            parts = [p.strip() for p in line.split('|')]
+            if len(parts) < 2:
+                raise forms.ValidationError(
+                    f'Строка "{line}" должна быть в формате: Компания | Должность | Годы'
+                )
+            result.append({
+                'company': parts[0],
+                'role': parts[1],
+                'years': parts[2] if len(parts) > 2 else '',
+            })
+        return result

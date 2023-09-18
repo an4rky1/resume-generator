@@ -22,15 +22,14 @@ class ResumeFormTests(TestCase):
             'name': 'John Doe',
             'bio': 'Backend developer',
             'skills_input': 'Python, Django',
-            'experience_input': json.dumps([
-                {'company': 'Acme', 'role': 'Dev', 'years': '2023'}
-            ]),
+            'experience_input': 'Acme | Dev | 2023',
             'template_style': 'minimal',
         })
         assert Resume.objects.count() == 1
         resume = Resume.objects.first()
         assert resume.name == 'John Doe'
         assert resume.skills == ['Python', 'Django']
+        assert resume.experience == [{'company': 'Acme', 'role': 'Dev', 'years': '2023'}]
         assert resume.slug is not None
 
     def test_pdf_download_returns_pdf(self):

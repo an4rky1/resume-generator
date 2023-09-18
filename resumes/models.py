@@ -2,6 +2,7 @@ import uuid
 
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
 
 
 class Resume(models.Model):
@@ -29,7 +30,7 @@ class Resume(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            base_slug = '-'.join(self.name.lower().split())
+            base_slug = slugify(self.name) or 'resume'
             slug = base_slug
             counter = 1
             while Resume.objects.filter(slug=slug).exists():
