@@ -27,6 +27,8 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-h902k8(8hqs5^y
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() == 'true'
 
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+if 'RENDER' in os.environ:
+    ALLOWED_HOSTS.extend(['.onrender.com', os.environ.get('RENDER_EXTERNAL_HOSTNAME', '')])
 
 
 # Application definition
